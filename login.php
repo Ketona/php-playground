@@ -1,6 +1,10 @@
 <?php 
 session_start();
 include('db.php');
+if (isset($_SESSION["user_name"])) {
+	header("Location: profile.php");
+	exit();
+}
 if ($_SERVER["REQUEST_METHOD"]=="POST") {
  	$name = $_POST["name"];
  	$password = md5($_POST["password"]);
@@ -29,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 				</form>
 			<?php } else if(isset($_GET["status"]) && $_GET["status"]=="fail"){ ?>
 					<h1>ვერ დალოგინდი</h1>
+					<a href="login.php">Try again</a>
 			<?php }?>
 	</body>
 </html>
