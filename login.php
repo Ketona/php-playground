@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
  	$query = "select * from users where user_name='$name' and user_password='$password'";
  	if (mysqli_num_rows(mysqli_query($con, $query))>0) {
  		$_SESSION["user_name"]=$name;
- 		header("Location: login.php?status=success");
+ 		header("Location: profile.php");
  	} else{
  		header("Location: login.php?status=fail");
  	}
@@ -29,10 +29,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 				</form>
 			<?php } else if(isset($_GET["status"]) && $_GET["status"]=="fail"){ ?>
 					<h1>ვერ დალოგინდი</h1>
-			<?php } else if(isset($_GET["status"]) && $_GET["status"]=="success"){ ?>
-					<h1>გილოცავთ გილოცავთ დალოგინებას</h1>
-					<h2><?php echo $_SESSION["user_name"]; ?></h2>
-					<a href="logout.php">Logout</a>
-			<?php } ?>
+			<?php }?>
 	</body>
 </html>
