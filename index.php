@@ -2,6 +2,11 @@
 session_start();
 include('db.php');
 
+if (isset($_SESSION["user_name"])) {
+	header("Location: profile.php");
+	exit();	
+}
+
 if ($_SERVER["REQUEST_METHOD"]=="POST") {
  	$name = $_POST["name"];
  	$password = md5($_POST["password"]);
@@ -11,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
  	} else{
  		$query = "insert into users (user_name, user_password) values ('$name', '$password')";
  		mysqli_query($con, $query);
- 		$_SESSION["user_name"] =$name;
  		header("Location: index.php?status=success");
  	}
 } 

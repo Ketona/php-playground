@@ -1,6 +1,12 @@
 <?php 
 session_start();
 include('db.php');
+
+if (!isset($_SESSION["user_name"])) {
+	header("Location: login.php");
+	exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"]=="POST") {
  	$name = $_POST["name"];
  	$password = md5($_POST["password"]);
