@@ -2,9 +2,9 @@
 session_start();
 include('db.php');
 
-if (isset($_SESSION["user_name"])) {
-	header("Location: profile.php");
-	exit();	
+if (!isset($_SESSION["user_name"])) {
+	header("Location: login.php");
+	exit();
 }
 
 if ($_SERVER["REQUEST_METHOD"]=="POST") {
@@ -12,11 +12,12 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
  	$password = md5($_POST["password"]);
  	$query = "select * from users where user_name='$name'";
  	if (mysqli_num_rows(mysqli_query($con, $query))>0) {
- 		header("Location: index.php?status=fail");
+ 		header("Location: register.php?status=fail");
  	} else{
  		$query = "insert into users (user_name, user_password) values ('$name', '$password')";
  		mysqli_query($con, $query);
- 		header("Location: index.php?status=success");
+ 		$_SESSION["user_name"] =$name;
+ 		header("Location: register.php?status=success");
  	}
 } 
 ?>
@@ -28,17 +29,9 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 		<title>ნიკას რაც უნდა</title>
 	</head>
 	<body>
-		<?php 
-			if($_SERVER["REQUEST_METHOD"]!="POST" && !isset($_GET["status"])){?>
-				<form method="post" action="<?php echo $_SERVER["PHP_SELF"] ?>">
-					<label for="name">სახელი: </label><input type="text" name="name" id="name"><br>
-					<label for="password">პაროლი: </label><input type="password" name="password" id="password"><br>
-					<input type="submit" value="რეგისტრაცია">
-				</form>
-			<?php } else if(isset($_GET["status"]) && $_GET["status"]=="fail"){ ?>
-					<h1>არსებობს უკვე ეგეთი ბრად</h1>
-			<?php } else if(isset($_GET["status"]) && $_GET["status"]=="success"){ ?>
-					<h1>წარმატებით დარეგისტრირდით გილოცავთ.</h1>
-			<?php } ?>
+		<h1>Welcome to your profile <?php echo $_SESSION["user_name"] ?></h1>
+		<br><a href="register.php">Register</a>
+		<br><a href="login.php">Login</a>
+		<br><a href="logout.php">Logout</a>
 	</body>
 </html>
