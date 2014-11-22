@@ -8,9 +8,9 @@ if (!isset($_SESSION["user_name"])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"]=="POST") {
- 	$name = $_POST["name"];
- 	$password = md5($_POST["password"]);
- 	$query = "select * from users where user_name='$name'";
+ 	$news = $_POST["news"];
+
+ 	/*$query = "select * from news where user_name='$name'";
  	if (mysqli_num_rows(mysqli_query($con, $query))>0) {
  		header("Location: register.php?status=fail");
  	} else{
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
  		mysqli_query($con, $query);
  		$_SESSION["user_name"] =$name;
  		header("Location: register.php?status=success");
- 	}
+ 	}*/
 } 
 ?>
 
@@ -30,8 +30,20 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 	</head>
 	<body>
 		<h1>Welcome to your profile <?php echo $_SESSION["user_name"] ?></h1>
-		<br><a href="register.php">Register</a>
-		<br><a href="login.php">Login</a>
+		<h2>You can add a news, you know</h2>
+		<form method="POST" action="<?php echo $_SERVER["PHP_SELF"] ?>">
+			<textarea name="news"></textarea><br>
+			<input type="submit" value="Add"><br>
+		</form>
+		<?php 
+			$sql="select * FROM news, users where news.user_id = users.user_id ORDER BY news_id desc";
+			$result=mysqli_query($con,$sql);
+			if(mysqli_num_rows($result)>0){
+			    while($row=mysqli_fetch_assoc($result)){
+			     echo $row['user_id'].' - ' .$row['news_text'].'<br>';
+				}
+			}
+		?>
 		<br><a href="logout.php">Logout</a>
 	</body>
 </html>
