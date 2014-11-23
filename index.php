@@ -9,16 +9,18 @@ if (!isset($_SESSION["user_name"])) {
 
 if ($_SERVER["REQUEST_METHOD"]=="POST") {
  	$news = $_POST["news"];
+ 	$name = $_SESSION["user_name"];
 
- 	/*$query = "select * from news where user_name='$name'";
- 	if (mysqli_num_rows(mysqli_query($con, $query))>0) {
- 		header("Location: register.php?status=fail");
- 	} else{
- 		$query = "insert into users (user_name, user_password) values ('$name', '$password')";
- 		mysqli_query($con, $query);
- 		$_SESSION["user_name"] =$name;
- 		header("Location: register.php?status=success");
- 	}*/
+ 	$sql="select * FROM users where user_name = '$name'";
+	$result=mysqli_query($con,$sql);
+		if(mysqli_num_rows($result)>0){
+		    while($row=mysqli_fetch_assoc($result)){
+		     $user_id = $row["user_id"];
+			}
+		}
+
+ 	$query = "insert into news (news_text, user_id) values ('$news', $user_id);";
+ 	mysqli_query($con, $query);
 } 
 ?>
 
@@ -36,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 			<input type="submit" value="Add"><br>
 		</form>
 		<?php 
+
 			$sql="select * FROM news, users where news.user_id = users.user_id ORDER BY news_id desc";
 			$result=mysqli_query($con,$sql);
 			if(mysqli_num_rows($result)>0){
@@ -43,6 +46,14 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 			     echo $row['user_id'].' - ' .$row['news_text'].'<br>';
 				}
 			}
+
+			$user_id = 5;
+
+			$result = mysql_query("select user_name FROM users WHERE user_id = '$user_id' LIMIT 1");
+			$row = mysql_fetch_array($result);
+			mysql_free_result($result);
+
+			echo "The username for user_id $user_id is " . $row['user_name'];
 		?>
 		<br><a href="logout.php">Logout</a>
 	</body>
