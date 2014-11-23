@@ -39,21 +39,13 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 		</form>
 		<?php 
 
-			$sql="select * FROM news, users where news.user_id = users.user_id ORDER BY news_id desc";
+			$sql="select user_name, news_text, news_id from users inner join news on users.user_id = news.user_id order by news_id desc;";
 			$result=mysqli_query($con,$sql);
 			if(mysqli_num_rows($result)>0){
 			    while($row=mysqli_fetch_assoc($result)){
-			     echo $row['user_id'].' - ' .$row['news_text'].'<br>';
+			     echo $row['user_name'].' - ' .$row['news_text'].'<br>';
 				}
 			}
-
-			$user_id = 5;
-
-			$result = mysql_query("select user_name FROM users WHERE user_id = '$user_id' LIMIT 1");
-			$row = mysql_fetch_array($result);
-			mysql_free_result($result);
-
-			echo "The username for user_id $user_id is " . $row['user_name'];
 		?>
 		<br><a href="logout.php">Logout</a>
 	</body>
